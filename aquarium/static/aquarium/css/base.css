@@ -1,0 +1,91 @@
+body {
+	background-color: #e6e6e6;
+}
+
+h1 {
+	color: black;
+}
+
+table {
+/*    border: 1px solid black; */
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+td {
+    border: 1px solid black;
+	text-align: left;
+	padding: 5px;
+}
+
+.jumbotron {
+  margin-bottom: 0px;
+  padding: 40px;
+  height: 250px;
+  color: black;
+  text-shadow: gray 0.3em 0.3em 0.3em;
+  background-image: url(https://i.ytimg.com/vi/PIZL7-HGKkI/maxresdefault.jpg);
+}
+
+/*.thumbnail {
+	padding-top: 20px;
+}*/
+
+.pagination {
+	text-align: center;
+	font-size: 16px;
+}
+
+.post-img {
+	width: 300px;	
+}
+
+.footnote {
+	text-align: center;
+}
+
+.id_link {
+	margin-bottom: 10px;
+	text-align: center;
+	font-size: 18px;
+}
+
+.short_table {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.td_width_1 {
+    width: 120px;
+}
+
+.td_width_2 {
+    width: 400px;
+}
+
+.loging {
+    border: none;
+	width: 300px;
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.loging-td {
+    border: none;
+}
+
+#align-ar {
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+
+

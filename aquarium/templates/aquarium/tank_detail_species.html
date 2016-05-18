@@ -1,0 +1,138 @@
+
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block head_title %}
+	{{ title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content%}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1>
+                    <b>Tank {{ instance.tank_id }}. {{ instance.name_eng }}</b>
+                    <b>{{ instance.name_arabic }}</b>
+                </h1>
+                <br/>
+                <h4>
+                    <p><b>Habitat:</b> <a href="{% url 'hdetail' instance.habitat.id %}">
+                        {{ instance.habitat.name_eng }} ({{ instance.habitat.name_arabic }})
+                    </a></p>
+                    <p>
+                        <b>Direction label:</b>
+                        {% if instance.direction_label_eng %}
+                            {{ instance.direction_label_eng }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </p>
+                    <p>
+                        <b>Direction:</b>
+                        {% if instance.direction == 0 %}
+                        Up
+                        {% elif instance.direction == 1 %}
+                        Down
+                        {% elif instance.direction == 2 %}
+                        Left
+                        {% elif instance.direction == 3 %}
+                        Right
+                        {% endif %}
+                    </p>
+                </h4>
+
+                <p>
+                    <a href="{% url 'tdetail' instance.tank_id %}" class="btn btn-default" role="button">Tank Quizes</a>
+                    <a href="{% url 'tdetail_s' instance.tank_id %}" class="btn btn-default disabled" role="button">Tank Species</a>
+                    <a href="" class="btn btn-warning" role="button">Edit</a>
+                    <a href="{% url 'tdelete_safe' instance.tank_id %}" class="btn btn-danger"  role="button">Delete</a>
+                    <!--<a href="{% url 'tdelete' instance.tank_id %}" class="btn btn-danger"  role="button">Delete</a>-->
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-sm-offset-0 id_link">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1><b>Tank Species</b></h1>
+                <p><b>Total: {{ species_all|length }}</b></p>
+                <p>
+                    <a href="{% url 'tcreate_s' instance.tank_id %}" class="btn btn-primary btn-xs" role="button">Add Species</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% for species in species_all %}
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="thumbnail">
+            <div class="caption">
+                <table>
+                    <tr>
+                        <td><b>Name (EN)</b></td><td>{{ species.name_eng }}</td>
+                        <td><b>Image</b></td>
+                        <td><b>Distibution map</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Name (AR)</b></td><td dir="rtl" style="text-align: right;">{{ species.name_arabic }}</td>
+                        <td rowspan="4" style="text-align: center;">
+                            {% if species.image %}
+                            <img src="{{ species.image.url }}" width="auto" height="200px">
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td rowspan="4" style="text-align: center;">
+                            {% if species.image %}
+                            <img src="{{ species.distribution_image.url }}" width="auto" height="200px">
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Scientific name</b></td><td>{{ species.scientific_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Distribution label (EN)</b></td>
+                        <td>{{ species.distribution_label_eng }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Distribution label (AR)</b></td>
+                        <td dir="rtl" style="text-align: right;">{{ species.distribution_label_arabic }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Description (EN)</b></td>
+                        <td colspan="3">{{ species.description_eng }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Description (AR)</b></td>
+                        <td colspan="3" dir="rtl" style="text-align: right;">{{ species.description_arabic }}</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="{% url 'tupdate_s' instance.tank_id species.id %}" class="btn btn-warning btn-xs" role="button">Edit</a>
+                    <a href="{% url 'tdelete_s' instance.tank_id species.id %}" class="btn btn-danger btn-xs" role="button">Delete</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="thumbnail">
+            <div class="caption">
+                <p>
+                    - Empty -
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock content %}
+

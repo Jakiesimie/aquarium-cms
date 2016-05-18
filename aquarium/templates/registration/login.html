@@ -1,0 +1,31 @@
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% if from.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+    <table class="loging" style="border: none">
+        <tr>
+            <td class="loging-td">{{ form.username.label_tag }}</td>
+            <td class="loging-td">{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td class="loging-td">{{ form.password.label_tag }}</td>
+            <td class="loging-td">{{ form.password }}</td>
+        </tr>
+        <tr>
+            <td class="loging-td"><input type="submit" value="login" /></td>
+            <td class="loging-td"><input type="hidden" name="next" value="{{ next }}" /></td>
+        </tr>
+    </table>
+
+    <!--<input type="submit" value="login" />-->
+    <!--<input type="hidden" name="next" value="{{ next }}" />-->
+</form>
+
+{% endblock %}

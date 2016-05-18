@@ -1,0 +1,85 @@
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-sm-12 col-sm-offset-0 id_link">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1>
+                    <b>{{ title }}</b>
+                </h1>
+                <p style="padding: 0; margin: 0;">
+                    {% for tank in queryset %}
+                    <a href="{% url 'tdetail' tank.tank_id %}">{{ tank.tank_id }}</a>
+                    {% endfor %}
+                    <a href="{% url 'tcreate' %}" class="btn btn-primary btn-xs" role="button">Add Tank</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+{% for tank in queryset %}
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3><b>{{ tank.tank_id }}. {{ tank.name_eng }}</b></h3>
+                <h3 id="align-ar"><b dir="rtl">{{ tank.tank_id }}. {{ tank.name_arabic }}</b></h3>
+
+                <br/>
+
+                <table>
+                    <tr>
+                        <td><b>Habitat (EN)</b></td>
+                        <td>{{ tank.habitat.name_eng }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Habitat (AR)</b></td>
+                        <td dir="rtl" id="align-ar">{{ tank.habitat.name_arabic }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Direction label:</b></td>
+                        <td>
+                            {% if tank.direction_label_eng %}
+                            {{ tank.direction_label_eng }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Direction</b></td>
+                        <td>
+                            {% if tank.direction == 0 %}
+                            Up
+                            {% elif tank.direction == 1 %}
+                            Down
+                            {% elif tank.direction == 2 %}
+                            Left
+                            {% elif tank.direction == 3 %}
+                            Right
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="{% url 'tdetail' tank.tank_id %}" class="btn btn-primary" role="button">View Tank Quizes</a>
+                    <a href="{% url 'tdetail_s' tank.tank_id %}" class="btn btn-primary" role="button">View Tank Species</a>
+                    <!--<a href="" class="btn btn-warning" role="button">Edit</a>-->
+                    <!--<a href="" class="btn btn-danger" role="button">Delete</a>-->
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% cycle "" "" "</div><div class='row'>" %}
+{% endfor %}
+</div>
+
+{% endblock content %}
+
+

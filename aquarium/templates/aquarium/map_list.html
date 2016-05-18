@@ -1,0 +1,66 @@
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-sm-12 col-sm-offset-0 id_link">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1>
+                    <b>{{ title }}</b>
+                </h1>
+                <p style="padding: 0; margin: 0;">
+                    <a href="{% url 'mcreate' %}" class="btn btn-primary btn-xs" role="button">Add Map</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+{% for map in queryset %}
+<div class="col-sm-4">
+    <div class="thumbnail">
+        <div class="caption">
+            <h3><b>{{ map.title }}</b></h3>
+            <br/>
+
+            <p>
+                <b>Is current:</b>
+                {% if map.is_current %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+            </p>
+            <p>
+                <img src="/media/{{ map.image }}" style="width:60%; height: 60%;">
+            </p>
+
+            <p>
+                <a href="{% url 'mupdate' map.id %}" class="btn btn-primary" role="button">Edit</a>
+                <a href="{% url 'mdelete' map.id %}" class="btn btn-danger" role="button">Delete</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-sm-12 col-sm-offset-0">
+    <div class="thumbnail">
+        <div class="caption">
+            <p>
+                - Empty -
+            </p>
+        </div>
+    </div>
+</div>
+
+{% cycle "" "" "</div><div class='row'>" %}
+{% endfor %}
+</div>
+
+{% endblock content %}
+
+

@@ -1,0 +1,171 @@
+
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block head_title %}
+	{{ title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content%}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1>
+                    <b>Tank {{ instance.tank_id }}. {{ instance.name_eng }}</b>
+                    <b>{{ instance.name_arabic }}</b>
+                </h1>
+                <br/>
+                <h4>
+                    <p><b>Habitat:</b> <a href="{% url 'hdetail' instance.habitat.id %}">
+                        {{ instance.habitat.name_eng }} ({{ instance.habitat.name_arabic }})
+                    </a></p>
+                    <p>
+                        <b>Direction label:</b>
+                        {% if instance.direction_label_eng %}
+                            {{ instance.direction_label_eng }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </p>
+                    <p>
+                        <b>Direction:</b>
+                        {% if instance.direction == 0 %}
+                        Up
+                        {% elif instance.direction == 1 %}
+                        Down
+                        {% elif instance.direction == 2 %}
+                        Left
+                        {% elif instance.direction == 3 %}
+                        Right
+                        {% endif %}
+                    </p>
+                </h4>
+
+                <p>
+                    <a href="{% url 'tdetail' instance.tank_id %}" class="btn btn-default disabled" role="button">Tank Quizes</a>
+                    <a href="{% url 'tdetail_s' instance.tank_id %}" class="btn btn-default" role="button">Tank Species</a>
+                    <a href="{% url 'tupdate' instance.tank_id %}" class="btn btn-warning" role="button">Edit</a>
+                    <a href="{% url 'tdelete_safe' instance.tank_id %}" class="btn btn-danger"  role="button">Delete</a>
+                    <!--<a href="{% url 'tdelete' instance.tank_id %}" class="btn btn-danger"  role="button">Delete</a>-->
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-sm-12 col-sm-offset-0 id_link">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1><b>Tank Quizes</b></h1>
+                <p><b>Total: {{ quizes|length }}</b></p>
+                <p>
+                <a href="{% url 'tcreate_cq' instance.tank_id 'text' %}" class="btn btn-primary btn-xs" role="button">Add Text Quiz</a>
+                <a href="{% url 'tcreate_cq' instance.tank_id 'image' %}" class="btn btn-primary btn-xs" role="button">Add Image Quiz</a>
+                <a href="{% url 'tcreate_cq' instance.tank_id 'image_table' %}" class="btn btn-primary btn-xs" role="button">Add Table Quiz</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    {% for grade in grades %}
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="thumbnail">
+            <div class="caption">
+            <h2>
+                <b>Quiz {{ grade.name }}</b>
+            </h2>
+            </div>
+        </div>
+    </div>
+
+    {% for quiz in quizes %}
+        {% if quiz.grade.name == grade.name %}
+        <div class="col-sm-12 col-sm-offset-0">
+            <div class="thumbnail">
+                <div class="caption">
+                    <table class="short_table">
+                        <tr>
+                            <td class="td_width_1"><b>Position</b></td>
+                            <td>{{ quiz.position }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td_width_1"><b>Grade</b></td>
+                            <td>{{ quiz.grade.name|slice:"6:" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td_width_1"><b>Type</b></td>
+                            <td>{{ quiz.type }}</td>
+                        </tr>
+
+                        <tr>
+                        {% if quiz.type == "text" %}
+                            <td class="td_width_1"><b>Text (EN)</b></td>
+                            <td>{{ quiz.text_eng }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td_width_1"><b>Text (AR)</b></td>
+                            <td dir="rtl" style="text-align: right;">{{ quiz.text_arabic }}</td>
+                        {% elif quiz.type == "image" %}
+                            {% for image in quiz.images.all %}
+                            <tr>
+                                <td class="td_width_1"><img src="/media/{{ image }}" width="auto" height="200px"></td>
+
+                                <td style="text-align: center;">
+                                    <p>
+                                        <a href="{% url 'tupdate_q_im' instance.tank_id image.id %}" class="btn btn-warning btn-xs" role="button">Change quiz image</a>
+                                    </p>
+                                    <p>
+                                        <a href="{% url 'tdelete_q_im' instance.tank_id image.id %}" class="btn btn-danger btn-xs" role="button">Delete quiz image</a>
+                                    </p>
+                                </td>
+                                {% empty %}
+                                <td>- no images -</td>
+                                <td>
+                                    <p>-</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% elif quiz.type == "image_table" %}
+                                <td colspan="2" style="text-align: center;">
+                                    <img src="/media/{{ quiz.image_table_eng }}" width="100%" height="auto">
+                                </td>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <img src="/media/{{ quiz.image_table_arabic }}" width="100%" height="auto">
+                                </td>
+                            </tr>
+                        {% endif %}
+                        </tr>
+                    </table>
+                    {% if quiz.type == 'image' %}
+                    <a href="{% url 'tcreate_q_im' instance.tank_id quiz.id %}" class="btn btn-primary btn-xs" role="button">Add quiz image</a>
+                    {% endif %}
+                    <a href="{% url 'tupdate_q' instance.tank_id quiz.id quiz.type %}" class="btn btn-warning btn-xs" role="button">Edit</a>
+                    <a href="{% url 'tdelete_q' instance.tank_id quiz.id %}" class="btn btn-danger btn-xs" role="button">Delete</a>
+                </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% empty %}
+        <div class="col-sm-12 col-sm-offset-0">
+            <div class="thumbnail">
+                <div class="caption">
+                    <p>
+                        - Empty -
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% endfor %}
+
+
+
+</div>
+
+{% endblock content %}
+

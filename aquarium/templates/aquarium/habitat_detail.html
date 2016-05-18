@@ -1,0 +1,138 @@
+
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block head_title %}
+	{{ title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content%}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="thumbnail">
+            <div class="caption">
+                <h1>
+                    <b>Habitat {{ instance.id }}. {{ instance.name_eng }}</b>
+                    <b>{{ instance.name_arabic }}</b>
+                </h1>
+                <br/>
+
+                <table>
+                    <tr>
+                        <td class="td_width_1"><b>Name (EN)</b></td>
+                        <td class="td_width_2">{{ instance.name_eng }}</td>
+                        <td rowspan="3" style="text-align: center;">
+                            <img src="/media/{{ instance.image }}" style="width: auto; height: 300px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_width_1"><b>Name (AR):</b></td>
+                        <td  class="td_width_2" style="text-align: right;">{{ instance.name_arabic }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td_width_1"><b>Tanks in that habitat</b></td>
+                        <td class="td_width_2" colspan="1">
+                            <ul>
+                                {% for tank in tanks %}
+                                <li>
+                                    <a href="{% url 'tdetail' tank.tank_id %}">{{ tank.name_eng }} ({{ tank.name_arabic }}) </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_width_1"><b>Description (EN)</b></td>
+                        <td class="td_width_2" colspan="2">{{ instance.description_eng }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td_width_1"><b>Description (AR)</b></td>
+                        <td class="td_width_2" colspan="2" dir="rtl" style="text-align: right;">{{ instance.description_arabic }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td_width_1"><b>Knowledge (EN)</b></td>
+                        <td class="td_width_2" colspan="2">{{ instance.knowledge_eng }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td_width_1"><b>Knowledge (AR)</b></td>
+                        <td class="td_width_2" colspan="2" dir="rtl" style="text-align: right;">{{ instance.knowledge_arabic }}</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="{% url 'hupdate' instance.id %}" class="btn btn-warning" role="button">Edit</a>
+                    <a href="{% url 'hdelete_safe' instance.id %}" class="btn btn-danger" role="button">Delete</a>
+                    <!--<a href="{% url 'hdelete' instance.id %}" class="btn btn-danger" role="button">Delete</a>-->
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+        <div class="col-sm-12 col-sm-offset-0 id_link">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h1><b>Trivia</b></h1>
+                    <p><b>Total: {{ instance.trivia.all|length }}</p></b>
+                    <p>
+                       <a href="{% url 'hcreate_tr' instance.id %}" class="btn btn-primary btn-xs" role="button">Add Trivia</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% for trivia in instance.trivia.all %}
+        <div class="col-sm-12 col-sm-offset-0">
+            <div class="thumbnail">
+                <div class="caption">
+                    <table class="short_table">
+                        <tr>
+                            <td class="td_width_1">
+                                <b>Name</b>
+                            </td>
+                            <td>
+                                {{ trivia.name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td_width_1">
+                                <b>Content (EN)</b>
+                            </td>
+                            <td>
+                                {{ trivia.text_eng }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td_width_1">
+                                <b>Content (AR)</b>
+                            </td>
+                            <td dir="rtl" style="text-align: right;">
+                                {{ trivia.text_arabic }}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+
+                    <p>
+                        <a href="{% url 'hupdate_tr' instance.id trivia.id %}" class="btn btn-warning btn-xs" role="button">Edit</a>
+                        <a href="{% url 'hdelete_tr' instance.id trivia.id %}" class="btn btn-danger btn-xs" role="button">Delete</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-sm-12 col-sm-offset-0">
+            <div class="thumbnail">
+                <div class="caption">
+                    <p>- Empty -</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+</div>
+
+{% endblock content %}
+

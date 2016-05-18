@@ -1,0 +1,34 @@
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<p>If you delete <b>Tank: {{ instance.tank_id }}. {{ instance.name_eng }} ({{ instance.name_arabic }})</b> items listed below also will be deleted:</p>
+
+<b>Species:</b>
+<ul>
+{% for species in instance.species_set.all %}
+    <li> {{ species.name_eng }}, ({{ species.name_arabic }})</li>
+{% endfor %}
+</ul>
+
+<b>Quizes:</b>
+<ul>
+{% for quiz in quizes %}
+    <li><b>Position:</b> {{ quiz.position }}, <b>Grade:</b> {{ quiz.grade.name|slice:"6:" }}, <b>Type:</b> {{ quiz.type }}</li>
+{% endfor %}
+</ul>
+
+<b>Quizes:</b>
+<ul>
+{% for quiz in instance.quiz_items_set.all %}
+    <li><b>Position:</b> {{ quiz.position }}, <b>Grade:</b> {{ quiz.grade.name|slice:"6:" }}, <b>Type:</b> {{ quiz.type }}</li>
+{% endfor %}
+</ul>
+
+<p>
+    <a href="{% url 'tlist' %}" class="btn btn-primary"  role="button">Back</a>
+    <a href="{% url 'tdelete' instance.tank_id %}" class="btn btn-danger"  role="button">Delete</a>
+</p>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "aquarium/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<p>If you delete <b>Habitat: {{ instance.id }}. {{ instance.name_eng }} ({{ instance.name_arabic }})</b> items listed below will also be deleted:</p>
+
+<b>Trivias:</b>
+<ul>
+{% for trivia in instance.trivia_set.all %}
+    <li><b>Position:</b> {{ trivia.id }}, <b>Grade:</b> {{ trivia.name }}, <b>Type:</b> {{ quiz.type }}</li>
+{% endfor %}
+</ul>
+
+
+<b>Tanks:</b>
+<ul>
+{% for tank in instance.tank_set.all|dictsort:"id" %}
+    <li><b>{{ tank.tank_id }}. {{ tank.name_eng }} ({{ tank.name_arabic }})</b></li>
+
+    <ul>
+        <li><b>Quizzes:</b></li>
+    {% for quiz in tank.quiz_set.all %}
+        <ul>
+            <li><b>Position:</b> {{ quiz.position }}, <b>Grade:</b> {{ quiz.grade.name|slice:"6:" }}, <b>Type:</b> {{ quiz.type }}</li>
+        </ul>
+    {% endfor %}
+    </ul>
+
+    <ul>
+        <li><b>Species:</b></li>
+    {% for species in tank.species_set.all|dictsort:"id" %}
+        <ul>
+            <li>{{ species.name_eng }} ({{ species.name_arabic }}), {{ species.scientific_name }}</li>
+        </ul>
+    {% endfor %}
+    </ul>
+{% endfor %}
+</ul>
+
+<p>
+    <a href="{% url 'hlist' %}" class="btn btn-primary"  role="button">Back</a>
+    <!--<a href="{% url 'hdelete' instance.id %}" class="btn btn-danger"  role="button">Delete</a>-->
+</p>
+
+{% endblock %}
